@@ -1,8 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import styled from "styled-components";
+import { MCTypye } from "stores/market/types";
+import { Link } from "react-router-dom";
 
-function DealStatus() {
+interface Props {
+  count?: MCTypye;
+}
+
+function DealStatus({ count }: Props) {
   return (
     <Wrap>
       <div className="box01 ext">
@@ -19,11 +25,13 @@ function DealStatus() {
               </tr>
               <tr>
                 <th>종 주문건수</th>
-                <td>0 건</td>
-                <td>5 건</td>
-                <td>12000 건</td>
+                <td>{count?.market_count_today} 건</td>
+                <td>{count?.market_count_month} 건</td>
+                <td>{count?.market_count_all} 건</td>
                 <td>
-                  <a className="btn_set small str_org btn-con">조회하기</a>
+                  <Link to="/deal/plist" className="btn_set small str_org btn-con">
+                    조회하기
+                  </Link>
                 </td>
               </tr>
             </tbody>
@@ -42,11 +50,13 @@ function DealStatus() {
               </tr>
               <tr>
                 <th>종 주문건수</th>
-                <td>0 건</td>
-                <td>5 건</td>
-                <td>12000 건</td>
+                <td>{count?.done_count_today} 건</td>
+                <td>{count?.done_count_month} 건</td>
+                <td>{count?.done_count_all} 건</td>
                 <td>
-                  <a className="btn_set small str_org btn-con">조회하기</a>
+                  <Link to="/deal/dlist" className="btn_set small str_org btn-con">
+                    조회하기
+                  </Link>
                 </td>
               </tr>
             </tbody>
@@ -61,14 +71,14 @@ function DealStatus() {
                 <th> 거래승인(판매자)</th>
                 <th>입금대기중</th>
                 <th>입금완료확인(판매자)</th>
-                <th>암호키 발급완료(구매자 미확인)</th>
+                {/* <th>암호키 발급완료(구매자 미확인)</th> */}
               </tr>
               <tr>
-                <th>0건</th>
-                <td>0 건</td>
-                <td>5 건</td>
-                <td>12000 건</td>
-                <td>0건</td>
+                <th>{count?.purchases_waiting_approval}건</th>
+                <td>{count?.purchases_waiting_deposit} 건</td>
+                <td>{count?.purchases_waiting_deposit} 건</td>
+                <td>{count?.purchases_deposit_completed} 건</td>
+                {/* <td>0건</td> */}
               </tr>
             </tbody>
           </table>

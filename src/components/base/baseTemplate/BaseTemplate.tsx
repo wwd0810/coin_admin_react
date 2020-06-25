@@ -29,10 +29,10 @@ const lnbMenu = [
             subTitle: "기본정보설정",
             uri: "/default/setting",
           },
-          {
-            subTitle: "약관/개인정보설정",
-            uri: "/default/terms",
-          },
+          // {
+          //   subTitle: "약관/개인정보설정",
+          //   uri: "/default/terms",
+          // },
         ],
       },
     ],
@@ -49,15 +49,15 @@ const lnbMenu = [
           },
         ],
       },
-      {
-        title: "PUSH관리",
-        subMenu: [
-          {
-            subTitle: "PUSH자동발송관리",
-            uri: "/user/push",
-          },
-        ],
-      },
+      // {
+      //   title: "PUSH관리",
+      //   subMenu: [
+      //     {
+      //       subTitle: "PUSH자동발송관리",
+      //       uri: "/user/push",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
@@ -101,10 +101,10 @@ const lnbMenu = [
             subTitle: "자주하는질문관리",
             uri: "/board/QnA",
           },
-          {
-            subTitle: "자주하는질문 카테고리관리",
-            uri: "/board/QnACategory",
-          },
+          // {
+          //   subTitle: "자주하는질문 카테고리관리",
+          //   uri: "/board/QnACategory",
+          // },
         ],
       },
       {
@@ -163,7 +163,7 @@ function BaseTemplate({ lnb_title, topIdx, lnbIdx, lnbSubIdx, contentTitle, chil
             </strong>
             <a className="login">로그아웃</a>
           </div>
-          <div className="wrap_search">
+          {/* <div className="wrap_search">
             <form>
               <fieldset>
                 <legend className="blind">통합검색</legend>
@@ -174,7 +174,7 @@ function BaseTemplate({ lnb_title, topIdx, lnbIdx, lnbSubIdx, contentTitle, chil
                 <a>검색</a>
               </fieldset>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
       <div id="container">

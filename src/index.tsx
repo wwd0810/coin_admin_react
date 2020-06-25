@@ -9,14 +9,21 @@ import { ThemeProvider } from "styles/theme-components";
 import { BrowserRouter as Router } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 
+import RootStore from "stores";
+import { Provider } from "mobx-react";
+
+const stores = new RootStore();
+
 ReactDOM.render(
   <>
     <CookiesProvider>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <Router>
-          <App />
-        </Router>
+        <Provider {...stores}>
+          <Router>
+            <App />
+          </Router>
+        </Provider>
       </ThemeProvider>
     </CookiesProvider>
   </>,

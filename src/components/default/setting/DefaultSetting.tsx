@@ -1,8 +1,194 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
+import { ServiceInfoType } from "stores/default/types";
 
-function DefaultSetting() {
+interface Props {
+  data?: ServiceInfoType;
+  update: (
+    service_name_ko: string,
+    service_name_en: string,
+    company_name_ko: string,
+    company_name_en: string,
+    owner_name_ko: string,
+    owner_name_en: string,
+    registration_num: string,
+    mail_num: string,
+    address_ko: string,
+    address_en: string,
+    phone: string,
+    fax: string,
+    privacy_officer: string,
+    admin_email: string,
+  ) => void;
+}
+
+function DefaultSetting({ data, update }: Props) {
+  const [serviceNameKo, setServiceNameKo] = useState<string>("");
+  const [serviceNameEn, setServiceNameEn] = useState<string>("");
+  const [companyNameKo, setCompanyNameKo] = useState<string>("");
+  const [companyNameEn, setCompanyNameEn] = useState<string>("");
+  const [ownerNameKo, setOwnerNameKo] = useState<string>("");
+  const [ownerNameEn, setOwnerNameEn] = useState<string>("");
+  const [registrationNum, setRegistrationNum] = useState<string>("");
+  const [mailNum, setMailNum] = useState<string>("");
+  const [addressKo, setAddressKo] = useState<string>("");
+  const [addressEn, setAddressEn] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [fax, setFax] = useState<string>("");
+  const [privacyOfficer, setPrivacyOfficer] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  const updateF = () => {
+    update(
+      serviceNameKo,
+      serviceNameEn,
+      companyNameKo,
+      companyNameEn,
+      ownerNameKo,
+      ownerNameEn,
+      registrationNum,
+      mailNum,
+      addressKo,
+      addressEn,
+      phone,
+      fax,
+      privacyOfficer,
+      email,
+    );
+  };
+
+  useEffect(() => {
+    if (data) {
+      setServiceNameKo(data.service_name_ko);
+      setServiceNameEn(data.service_name_en);
+      setCompanyNameKo(data.company_name_ko);
+      setCompanyNameEn(data.company_name_en);
+      setOwnerNameKo(data.owner_name_ko);
+      setOwnerNameEn(data.owner_name_en);
+      setRegistrationNum(data.registration_num);
+      setMailNum(data.mail_num);
+      setAddressKo(data.address_ko);
+      setAddressEn(data.address_en);
+      setPhone(data.phone);
+      setFax(data.fax);
+      setPrivacyOfficer(data.privacy_officer);
+      setEmail(data.admin_email);
+    }
+  }, [data]);
+
+  const onChangeSNK = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setServiceNameKo(value);
+  }, []);
+
+  const onChangeSNE = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setServiceNameEn(value);
+  }, []);
+
+  const onChangeCNK = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setCompanyNameKo(value);
+  }, []);
+
+  const onChangeCNE = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setCompanyNameEn(value);
+  }, []);
+
+  const onChangeONK = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setOwnerNameKo(value);
+  }, []);
+
+  const onChangeONE = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setOwnerNameEn(value);
+  }, []);
+
+  const onChangeRN = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setRegistrationNum(value);
+  }, []);
+
+  const onChangeMN = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setMailNum(value);
+  }, []);
+
+  const onChangeAK = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setAddressKo(value);
+  }, []);
+
+  const onChangeAE = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setAddressEn(value);
+  }, []);
+
+  const onChangeP = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setPhone(value);
+  }, []);
+
+  const onChangeF = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setFax(value);
+  }, []);
+
+  const onChangePO = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setPrivacyOfficer(value);
+  }, []);
+
+  const onChangeE = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setEmail(value);
+  }, []);
+
   return (
     <Wrap>
       <div className="table01">
@@ -25,6 +211,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={serviceNameKo}
+                    onChange={onChangeSNK}
                     // value="asdasdasd"
                   />
                 </td>
@@ -35,6 +223,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={serviceNameEn}
+                    onChange={onChangeSNE}
                     // value="asdasdasd"
                   />
                 </td>
@@ -48,6 +238,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={companyNameKo}
+                    onChange={onChangeCNK}
                     // value="asdasdasd"
                   />
                 </td>
@@ -58,6 +250,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={companyNameEn}
+                    onChange={onChangeCNE}
                     // value="asdasdasd"
                   />
                 </td>
@@ -71,6 +265,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={ownerNameKo}
+                    onChange={onChangeONK}
                     // value="asdasdasd"
                   />
                 </td>
@@ -81,6 +277,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={ownerNameEn}
+                    onChange={onChangeONE}
                     // value="asdasdasd"
                   />
                 </td>
@@ -94,6 +292,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={registrationNum}
+                    onChange={onChangeRN}
                     // value="asdasdasd"
                   />
                 </td>
@@ -104,6 +304,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={mailNum}
+                    onChange={onChangeMN}
                     // value="asdasdasd"
                   />
                 </td>
@@ -118,6 +320,8 @@ function DefaultSetting() {
                     type="text"
                     className="int_case_1"
                     style={{ width: "74%" }}
+                    value={addressKo}
+                    onChange={onChangeAK}
                     // value="asdasdasd"
                   />
                 </td>
@@ -132,6 +336,8 @@ function DefaultSetting() {
                     type="text"
                     className="int_case_1"
                     style={{ width: "74%" }}
+                    value={addressEn}
+                    onChange={onChangeAE}
                     // value="asdasdasd"
                   />
                 </td>
@@ -145,6 +351,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={phone}
+                    onChange={onChangeP}
                     // value="asdasdasd"
                   />
                 </td>
@@ -155,6 +363,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={fax}
+                    onChange={onChangeF}
                     // value="asdasdasd"
                   />
                 </td>
@@ -168,6 +378,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={privacyOfficer}
+                    onChange={onChangePO}
                     // value="asdasdasd"
                   />
                 </td>
@@ -178,6 +390,8 @@ function DefaultSetting() {
                   <input
                     type="text"
                     className="int_case_1"
+                    value={email}
+                    onChange={onChangeE}
                     // value="asdasdasd"
                   />
                 </td>
@@ -188,7 +402,9 @@ function DefaultSetting() {
         </form>
       </div>
       <div className="btn_area center">
-        <a className="btn big bg-type orange01">설정저장</a>
+        <a className="btn big bg-type orange01" onClick={updateF}>
+          설정저장
+        </a>
       </div>
     </Wrap>
   );

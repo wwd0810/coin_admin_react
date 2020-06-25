@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import styled from "styled-components";
 
@@ -6,27 +7,29 @@ function Login() {
     <Wrap>
       <div className="login-area">
         <div className="login-logo">
-          <h1>Woogos BACK OFFICE</h1>
+          <h1>CASHLINK BACK OFFICE</h1>
           <p>관리자 로그인</p>
         </div>
         <div className="login-scope">
           <form>
             <fieldset>
-              <span className="scope">
+              {/* <span className="scope">
                 <label htmlFor="userID">아이디</label>
                 <input type="text" placeholder="아이디" style={{ paddingLeft: "10px" }} />
               </span>
               <span className="scope">
                 <label htmlFor="userPW">비밀번호</label>
                 <input type="password" placeholder="비밀번호" style={{ paddingLeft: "10px" }} />
-              </span>
-              <button type="button">
-                <span>로그인</span>
-              </button>
-              <span className="login-saves">
+              </span> */}
+              <a
+                href={`${process.env.REACT_APP_AUTH_API_BASE}/oauth/authorize?client_id=cashlink&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`}
+              >
+                <span>통합 로그인</span>
+              </a>
+              {/* <span className="login-saves">
                 <input type="checkbox" />
                 <label htmlFor="login-save">아이디 저장</label>
-              </span>
+              </span> */}
             </fieldset>
           </form>
         </div>
@@ -102,18 +105,19 @@ const Wrap = styled.div`
     /* vertical-align: top; */
   }
 
-  .login-area .login-scope button[type="button"] {
+  .login-area .login-scope button[type="button"],
+  a {
     border: none;
     position: absolute;
-    left: 435px;
-    top: 74px;
-    width: 90px;
-    height: 72px;
+    left: 240px;
+    top: 20px;
+    width: 200px;
+    height: 87px;
     font-size: 16px;
     color: #fff;
     font-weight: bold;
     text-align: center;
-    line-height: 74px;
+    line-height: 87px;
     background-color: #f27223;
   }
 

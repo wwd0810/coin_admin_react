@@ -15,34 +15,71 @@ import NoticePage from "pages/board/NoticePage";
 import QnAPage from "pages/board/QnAPage";
 import QnaCategoryPage from "pages/board/QnaCategoryPage";
 import LoginPage from "pages/login/LoginPage";
+import CallbackPage from "pages/my/CallbackPage";
+import UserStore from "stores/users";
+import client from "lib/client";
+import { inject, observer } from "mobx-react";
 //  여기 이상함 확인좀 !!!
+
+interface Props {
+  userStore?: UserStore;
+}
 
 interface PrivateRouteProps extends RouteProps {
   component: React.ComponentType<{}>;
   role: string[] | string;
 }
 
+interface State {
+  isLoading: boolean;
+}
+
 interface Props extends RouteComponentProps, ReactCookieProps {}
 
-class App extends React.Component<Props> {
+@inject("userStore")
+@observer
+class App extends React.Component<Props, State> {
+  private UserStore = this.props.userStore! as UserStore;
+
+  state = {
+    isLoading: true,
+  };
+
+  async componentDidMount() {
+    // ================================================================================
+    //  자동로그인 및 토큰 설정
+    // ================================================================================
+
+    const auth = window.localStorage.getItem("auth");
+    if (auth) {
+      const LoginData: string = auth;
+      client.defaults.headers.common["Authorization"] = `Bearer ${LoginData}`;
+      await this.UserStore.GetUser();
+
+      if (this.UserStore.success["GET_USER"]) {
+      } else {
+        if (this.UserStore.failure["GET_USER"][0]) {
+          window.localStorage.clear();
+
+          this.props.history.push("/login");
+        }
+      }
+    }
+
+    this.setState({ isLoading: false });
+  }
+
   PrivateRoute = ({ component: Component, ...other }: PrivateRouteProps) => {
     return (
       <Route
         {...other}
         render={(props: any) => {
-          // if (
-          //   this.state.isLoading ||
-          //   this.UserStore.pending["LOGIN"] ||
-          //   this.UserStore.pending["SESSION_REFRESH"]
-          // )
-          //   return null;
-          // // || !this.UserStore.user
-          // if (!this.UserStore.isLoggedIn) {
-          //   console.log(this.UserStore.isLoggedIn!);
-          //   console.log(this.UserStore.user!);
-          //   console.log(client.defaults.headers.common["Authorization"]);
-          // return <Redirect to="/login" />;
-          // }
+          if (this.state.isLoading) return null;
+
+          if (!this.UserStore.IsLoggedIn) {
+            alert("로그인이 필요합니다.");
+            return <Redirect to="/login" />;
+          }
 
           return <Component {...props} />;
         }}
@@ -55,6 +92,7 @@ class App extends React.Component<Props> {
       <Router>
         <Switch>
           <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/callback" component={CallbackPage} />
           <this.PrivateRoute exact path="/" role="Login" component={DefaultSettingPage} />
           <this.PrivateRoute
             exact

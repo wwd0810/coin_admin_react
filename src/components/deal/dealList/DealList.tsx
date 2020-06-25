@@ -1,8 +1,121 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
+import { useEffect } from "react";
 
-function DaelList() {
+import { makeStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
+
+import { DealType } from "stores/market/types";
+
+interface Props {
+  list: DealType[];
+  paging?: Paging;
+  search: (
+    page?: number,
+    query?: string,
+    duration?: string,
+    quanLow?: number,
+    quanHigh?: number,
+    priceLow?: number,
+    priceHigh?: number,
+  ) => void;
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+
+function DaelList({ search, list, paging }: Props) {
+  const classes = useStyles();
+
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>("");
+  const [duration, setDuration] = useState<string>("");
+  const [quanLow, setQuanLow] = useState<number>();
+  const [quanHigh, setQuanHigh] = useState<number>();
+  const [priceLow, setPriceLow] = useState<number>();
+  const [priceHigh, setPriceHigh] = useState<number>();
+
+  useEffect(() => {
+    search(page, query);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const onChangeQuery = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setQuery(value);
+  }, []);
+
+  const onChangeQL = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setQuanLow(value);
+  }, []);
+
+  const onChangeQH = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setQuanHigh(value);
+  }, []);
+
+  const onChangePL = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setPriceLow(value);
+  }, []);
+
+  const onChangePH = useCallback((e: any) => {
+    e.preventDefault();
+
+    const { value } = e.target;
+
+    setPriceHigh(value);
+  }, []);
+
+  const onChangeDuration = useCallback(
+    (e: any) => {
+      e.preventDefault();
+
+      const { id } = e.target;
+
+      if (duration !== id) setDuration(id);
+      else setDuration("");
+    },
+    [duration],
+  );
+
+  const handlePage = (event: any, page: number) => {
+    setPage(page - 1);
+  };
+
+  const onSearch = () => {
+    search(0, query, duration, quanLow, quanHigh, priceLow, priceHigh);
+  };
+
+  const statusCheck = (status: string) => {
+    if (status === "WAITING_FOR_APPROVAL") return "승인대기 중";
+    if (status === "WATING_FOR_DEPOSIT") return "입금대기 중";
+    if (status === "DEPOSIT_COMPLETED") return "입금완료";
+    if (status === "DONE") return "완료";
+    if (status === "EXPIRED") return "만료";
+    if (status === "CANCEL") return "취소";
+    if (status === "DENY") return "거절";
+  };
+
   return (
     <Wrap>
       <div className="box01">
@@ -17,14 +130,19 @@ function DaelList() {
             <tr>
               <th>검색어</th>
               <td colSpan={3}>
-                <select name="searchfield" id=""></select>
-                <input type="text" style={{ width: "300px", marginLeft: "5px" }} />
+                {/* <select name="searchfield" id=""></select> */}
+                <input
+                  type="text"
+                  style={{ width: "300px", marginLeft: "5px" }}
+                  value={query}
+                  onChange={onChangeQuery}
+                />
               </td>
             </tr>
             <tr>
               <th>기간조건</th>
               <td colSpan={3}>
-                <select name="searchfield" id=""></select>
+                {/* <select name="searchfield" id=""></select>
                 <input
                   type="date"
                   name="search_sdate"
@@ -40,27 +158,69 @@ function DaelList() {
                   id="search_sdate"
                   className="text hasDatepicker"
                   // readOnly
-                />
+                /> */}
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>오늘</a>
+                  <a
+                    id="TODAY"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "TODAY" ? "#f47a21" : "" }}
+                  >
+                    오늘
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>1주일</a>
+                  <a
+                    id="1WEEK"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "1WEEK" ? "#f47a21" : "" }}
+                  >
+                    1주일
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>1개월</a>
+                  <a
+                    id="1MONTH"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "1MONTH" ? "#f47a21" : "" }}
+                  >
+                    1개월
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>3개월</a>
+                  <a
+                    id="3MONTH"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "3MONTH" ? "#f47a21" : "" }}
+                  >
+                    3개월
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>6개월</a>
+                  <a
+                    id="6MONTH"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "6MONTH" ? "#f47a21" : "" }}
+                  >
+                    6개월
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>1년</a>
+                  <a
+                    id="1YEAR"
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "1YEAR" ? "#f47a21" : "" }}
+                  >
+                    1년
+                  </a>
                 </span>
                 <span className="btn-type2 c3" style={{ marginLeft: "5px" }}>
-                  <a>전체</a>
+                  <a
+                    id=""
+                    onClick={onChangeDuration}
+                    style={{ background: duration === "ALL" ? "#f47a21" : "" }}
+                  >
+                    전체
+                  </a>
                 </span>
               </td>
             </tr>
@@ -71,12 +231,16 @@ function DaelList() {
                   type="text"
                   className="text hasDatepicker"
                   style={{ marginLeft: "5px" }}
+                  value={quanLow}
+                  onChange={onChangeQL}
                   // readOnly
                 />
                 ~
                 <input
                   type="text"
                   className="text hasDatepicker"
+                  value={quanHigh}
+                  onChange={onChangeQH}
                   // readOnly
                 />
               </td>
@@ -85,33 +249,37 @@ function DaelList() {
               <th>등록금액</th>
 
               <td colSpan={3}>
-                <select name="searchfield" id=""></select>
+                {/* <select name="searchfield" id=""></select> */}
                 <input
                   type="text"
                   className="text hasDatepicker"
                   style={{ marginLeft: "5px" }}
+                  value={priceLow}
+                  onChange={onChangePL}
                   // readOnly
                 />
                 ~
                 <input
                   type="text"
                   className="text hasDatepicker"
+                  value={priceHigh}
+                  onChange={onChangePH}
                   // readOnly
                 />
               </td>
             </tr>
-            <tr>
+            {/* <tr>
               <th>거래진행상태</th>
 
               <td colSpan={3}>
                 <select name="searchfield" id=""></select>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
         <div className="btn-center" style={{ margin: "10px 0 0 0" }}>
           <span className="btn-type1 ml">
-            <a>검색하기</a>
+            <a onClick={onSearch}>검색하기</a>
           </span>
           <span className="btn-type1 c3 ml" style={{ marginLeft: "10px" }}>
             <a>초기화</a>
@@ -121,7 +289,7 @@ function DaelList() {
       <div className="box01" style={{ marginTop: "20px" }}>
         <div className="result_title">
           <p>
-            전체 <em>5000</em>건
+            전체 <em>{paging && paging.count}</em>건
           </p>
           <div className="right">
             <select></select>
@@ -129,9 +297,9 @@ function DaelList() {
         </div>
         <div className="table01">
           <colgroup>
-            <col style={{ width: "5%" }} />
-            <col style={{ width: "5%" }} />
-            <col style={{ width: "5%" }} />
+            {/* <col style={{ width: "5%" }} /> */}
+            {/* <col style={{ width: "5%" }} /> */}
+            {/* <col style={{ width: "5%" }} /> */}
             <col style={{ width: "5%" }} />
             <col style={{ width: "5%" }} />
             <col style={{ width: "5%" }} />
@@ -143,13 +311,13 @@ function DaelList() {
           </colgroup>
           <thead>
             <tr>
-              <th scope="col">
+              {/* <th scope="col">
                 <input type="checkbox" />
-              </th>
+              </th> */}
               <th scope="col">번호</th>
 
-              <th scope="col">국가</th>
-              <th scope="col">주문번호</th>
+              {/* <th scope="col">국가</th> */}
+              {/* <th scope="col">주문번호</th> */}
               <th scope="col">판매자 아이디</th>
               <th scope="col">구매자 아이디</th>
               <th scope="col">딜링수량</th>
@@ -176,27 +344,36 @@ function DaelList() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td>2010</td>
-              <td>KOR</td>
-              <td>200408-09399504</td>
-              <td>sda1397</td>
-              <td>foryou1sj</td>
-              <td>100</td>
-              <td>1,000,000</td>
-              <td>2020.04.11 08:23</td>
-              <td>2020.04.11 08:23</td>
-              <td>거래종료</td>
-            </tr>
+            {list.map((data, idx) => (
+              <tr key={idx}>
+                {/* <td></td> */}
+                <td>{data.id}</td>
+                {/* <td>KOR</td> */}
+                {/* <td>200408-09399504</td> */}
+                <td>{data.seller.username}</td>
+                <td>{data.buyer.username}</td>
+                <td>{data.market.quantity}</td>
+                <td>{data.market.fees}</td>
+                <td>{data.market.created_at}</td>
+                <td>{data.market.updated_at}</td>
+                <td>{statusCheck(data.status)}</td>
+              </tr>
+            ))}
           </tbody>
         </div>
       </div>
       <div className="tbl_mb_area">
-        <div className="paging">
-          <strong>1</strong>
-          <strong>2</strong>
+        {/* <div className="paging"> */}
+        <div className={classes.root}>
+          <Pagination
+            count={paging ? Math.ceil(paging.count / paging.limit) : 0}
+            variant="outlined"
+            shape="rounded"
+            page={page + 1}
+            onChange={handlePage}
+          />
         </div>
+        {/* </div> */}
       </div>
     </Wrap>
   );
